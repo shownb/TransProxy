@@ -1,4 +1,8 @@
 # -*- coding:utf-8 -*-
+
+# Copyright (c) 2014 shownb github.com/shownb
+#
+
 '''
 epoll的例子
 接受+转发的例子
