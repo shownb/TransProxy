@@ -1,6 +1,8 @@
 TransProxy
 ==========
 
+添加了一个socks5转透明代理的代码。来自 https://github.com/xsm1997/KumaSocks
+
 TransProxy for shadowsocks.
 
 自制，常有错
