@@ -2,6 +2,17 @@ TransProxy
 ==========
 
 添加了一个socks5转透明代理的代码。来自 https://github.com/xsm1997/KumaSocks
+```bash
+sudo iptables -t nat -A PREROUTING -i eth1 -p tcp --syn -j REDIRECT --to-ports 9040
+sudo sysctl -w net.ipv4.ip_forward=1
+```
+/etc/resolv.conf
+```
+options use-vc
+nameserver 1.1.1.1
+nameserver 8.8.8.8
+```
+
 
 TransProxy for shadowsocks.
 
