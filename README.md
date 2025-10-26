@@ -3,7 +3,23 @@ TransProxy
 
 添加了一个socks5转透明代理的代码。来自 https://github.com/xsm1997/KumaSocks
 ```bash
-sudo iptables -t nat -A PREROUTING -i eth1 -p tcp --syn -j REDIRECT --to-ports 9040
+# 可选：把规则放到自定义链，便于管理
+sudo iptables -t nat -N TRANSPROXY
+
+# 1) 从 PREROUTING 仅把经 eth0 的报文导入自定义链
+sudo iptables -t nat -A PREROUTING -i eth0 -p tcp -j TRANSPROXY
+
+# 2) 自定义链内：排除发往本机的目的地址
+sudo iptables -t nat -A TRANSPROXY -m addrtype --dst-type LOCAL -j RETURN
+
+# 3) 排除已经是 9040 的流量，避免自吃
+sudo iptables -t nat -A TRANSPROXY -p tcp --dport 9040 -j RETURN
+
+# 4) （可选）排除你不想代理的目的端口，比如 22
+#sudo iptables -t nat -A TRANSPROXY -p tcp --dport 22 -j RETURN
+
+# 5) 其余新建连接统一重定向到 9040
+sudo iptables -t nat -A TRANSPROXY -p tcp -m conntrack --ctstate NEW -j REDIRECT --to-ports 9040
 sudo sysctl -w net.ipv4.ip_forward=1
 ```
 /etc/resolv.conf
